@@ -1,15 +1,12 @@
-package tv.vizbee.firetvdemointegrationapp;
+package tv.vizbee.firetvdemointegrationapp.exoPlayer;
 
+import android.content.Intent;
 import android.net.Uri;
-import android.os.Handler;
-import android.provider.ContactsContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
 
-import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Format;
@@ -20,11 +17,6 @@ import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.AdaptiveMediaSourceEventListener;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.dash.DashMediaSource;
-import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
-import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
-import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveVideoTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
@@ -35,27 +27,26 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DataSpec;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
-public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMediaSourceEventListener, ExtractorMediaSource.EventListener, View.OnKeyListener {
+import tv.vizbee.firetvdemointegrationapp.BuildConfig;
+import tv.vizbee.firetvdemointegrationapp.R;
+import tv.vizbee.firetvdemointegrationapp.model.Video;
+import tv.vizbee.screen.api.Vizbee;
+import tv.vizbee.screen.api.messages.VideoInfo;
+
+public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMediaSourceEventListener, ExtractorMediaSource.EventListener {
 
     private SimpleExoPlayer mPlayer;
     private SimpleExoPlayerView mPlayerView;
     private Handler mHandler;
 
-    private static final DefaultBandwidthMeter BANDWIDTH_METER = new DefaultBandwidthMeter();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exo_player);
-
-        findViewById(R.id.exoplayer_root).setOnKeyListener(this);
 
         // 1. Create a default TrackSelector
         mHandler = new Handler();
@@ -73,20 +64,39 @@ public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMedi
         mPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoplayer_player);
         mPlayerView.setPlayer(mPlayer);
         mPlayerView.setUseController(true);
-
-        Bundle extras = getIntent().getExtras();
-        if ((null != extras) && extras.containsKey("video")) {
-            Video video = extras.getParcelable("video");
-            loadVideo(video);
-        }
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
-        if (null != mPlayer) {
-            mPlayer.setPlayWhenReady(true);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        handleVideoIntent();
+    }
+
+    private void handleVideoIntent() {
+
+        Bundle extras = getIntent().getExtras();
+        if ((null != extras) && !extras.containsKey("duplicate")) {
+
+            getIntent().putExtra("duplicate", true);
+
+            Video video = null;
+            int position = 0;
+            if (extras.containsKey("video")) {
+                video = extras.getParcelable("video");
+            }
+            if (extras.containsKey("position")) {
+                position = extras.getInt("position");
+            }
+
+            if (null != video) {
+                prepareVideo(video, position);
+            }
         }
     }
 
@@ -94,14 +104,15 @@ public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMedi
     protected void onStop() {
         super.onStop();
 
-        if (null != mPlayer) {
-            mPlayer.setPlayWhenReady(false);
-        }
-    }
+        // ---------------------------
+        // [BEGIN] Vizbee Integration
+        // ---------------------------
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+        Vizbee.getInstance().removeVideoAdapter();
+
+        // ---------------------------
+        // [END] Vizbee Integration
+        // ---------------------------
 
         if (null != mPlayer) {
             mPlayer.release();
@@ -109,8 +120,25 @@ public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMedi
     }
 
     @Override
-    public boolean onKey(View view, int i, KeyEvent keyEvent) {
-        return mPlayerView.dispatchMediaKeyEvent(keyEvent);
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return mPlayerView.dispatchMediaKeyEvent(event);
+    }
+
+    private void prepareVideo(Video video, int position) {
+
+        // ---------------------------
+        // [BEGIN] Vizbee Integration
+        // ---------------------------
+
+        VideoInfo videoInfo = new VideoInfo(video.getGuid());
+        ExoPlayerAdapter vizbeeVideoAdapter = new ExoPlayerAdapter(mPlayer);
+        Vizbee.getInstance().setVideoAdapter(this, videoInfo, vizbeeVideoAdapter);
+
+        // ---------------------------
+        // [END] Vizbee Integration
+        // ---------------------------
+
+        loadVideo(video);
     }
 
     private void loadVideo(Video video) {
@@ -127,57 +155,11 @@ public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMedi
         ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
         // This is the MediaSource representing the media to be played.
-//        MediaSource videoSource = new ExtractorMediaSource(videoUri, dataSourceFactory, extractorsFactory, null, null);
-        MediaSource videoSource = buildMediaSource(videoUri, dataSourceFactory, "");
+        MediaSource videoSource = ExoplayerUtils.buildMediaSource(this, videoUri, dataSourceFactory, mHandler, "", this, this);
 
         // Prepare the player with the source.
         mPlayer.prepare(videoSource);
-    }
-
-    private MediaSource buildMediaSource(Uri uri, DataSource.Factory mediaDataSourceFactory, String overrideExtension) {
-        int type = Util.inferContentType(!TextUtils.isEmpty(overrideExtension) ? "." + overrideExtension
-                : uri.getLastPathSegment());
-
-        switch (type) {
-            case C.TYPE_SS:
-                return new SsMediaSource(uri, buildDataSourceFactory(false), new DefaultSsChunkSource.Factory(mediaDataSourceFactory), mHandler, this);
-            case C.TYPE_DASH:
-                return new DashMediaSource(uri, buildDataSourceFactory(false), new DefaultDashChunkSource.Factory(mediaDataSourceFactory), mHandler, this);
-            case C.TYPE_HLS:
-                return new HlsMediaSource(uri, mediaDataSourceFactory, mHandler, this);
-            case C.TYPE_OTHER:
-                return new ExtractorMediaSource(uri, mediaDataSourceFactory, new DefaultExtractorsFactory(), mHandler, this);
-            default: {
-                throw new IllegalStateException("Unsupported type: " + type);
-            }
-        }
-    }
-
-    /* Returns a new DataSource factory.
-     *
-     * @param useBandwidthMeter Whether to set {@link #BANDWIDTH_METER} as a listener to the new
-     *     DataSource factory.
-     * @return A new DataSource factory.
-     */
-    private DataSource.Factory buildDataSourceFactory(boolean useBandwidthMeter) {
-        return (buildDataSourceFactory(useBandwidthMeter ? BANDWIDTH_METER : null));
-    }
-
-    public DataSource.Factory buildDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultDataSourceFactory(this, bandwidthMeter,
-                buildHttpDataSourceFactory(bandwidthMeter));
-    }
-
-    public HttpDataSource.Factory buildHttpDataSourceFactory(DefaultBandwidthMeter bandwidthMeter) {
-        return new DefaultHttpDataSourceFactory(getUserAgent(), bandwidthMeter);
-    }
-
-    public boolean useExtensionRenderers() {
-        return BuildConfig.FLAVOR.equals("withExtensions");
-    }
-
-    public String getUserAgent() {
-        return Util.getUserAgent(this, BuildConfig.APPLICATION_ID);
+        mPlayer.setPlayWhenReady(true);
     }
 
     @Override

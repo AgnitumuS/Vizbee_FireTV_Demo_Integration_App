@@ -23,85 +23,202 @@
         android:visibility="gone" />
 
     <LinearLayout
-        android:focusable="false"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/center_anchor"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:layout_centerInParent="true"
+        android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/main_video_one_image"
-            android:layout_width="220dp"
-            android:layout_height="300dp"
-            android:background="@drawable/selector_poster"
-            android:focusable="true"
-            android:nextFocusLeft="@+id/main_video_two_image"
-            android:nextFocusRight="@+id/main_video_two_image"
-            android:nextFocusForward="@id/main_video_two_image"
-            android:padding="8dp"
-            android:scaleType="centerInside"
-            tools:src="@drawable/bigbuckbunny_720x1024">
-            <requestFocus/>
-        </ImageView>
-
-        <TextView
-            android:id="@+id/main_video_one_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/main_video_one_image"
-            android:layout_alignRight="@id/main_video_one_image"
-            android:layout_below="@id/main_video_one_image"
-            android:layout_marginTop="8dp"
+            android:layout_centerVertical="true"
             android:focusable="false"
-            android:gravity="center"
-            tools:text="Big Buck Bunny"
-            android:textColor="@android:color/white"
-            android:textSize="28sp" />
-    </LinearLayout>
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
-    <android.support.v4.widget.Space
-        android:id="@+id/center_anchor"
-        android:layout_width="80px"
-        android:layout_height="10px"
-        android:layout_centerInParent="true" />
+            <ImageView
+                android:id="@+id/main_video_one_image"
+                android:layout_width="@dimen/main_poster_width"
+                android:layout_height="300dp"
+                android:background="@drawable/selector_poster"
+                android:focusable="true"
+                android:nextFocusForward="@+id/main_video_two_image"
+                android:nextFocusLeft="@+id/main_video_four_image"
+                android:nextFocusRight="@+id/main_video_two_image"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                tools:src="@drawable/sintel_720x1024">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:focusable="false"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/center_anchor"
-        android:gravity="center_horizontal"
-        android:orientation="vertical">
+                <requestFocus />
+            </ImageView>
 
-        <ImageView
-            android:id="@+id/main_video_two_image"
-            android:layout_width="220dp"
-            android:layout_height="300dp"
-            android:background="@drawable/selector_poster"
-            android:focusable="true"
-            android:nextFocusLeft="@+id/main_video_one_image"
-            android:nextFocusRight="@+id/main_video_one_image"
-            android:nextFocusForward="@id/main_video_one_image"
-            android:padding="8dp"
-            android:scaleType="centerInside"
-            tools:src="@drawable/tearsofsteel_720x1024" />
+            <TextView
+                android:id="@+id/main_video_one_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                tools:text="Sintel" />
 
-        <TextView
-            android:id="@+id/main_video_two_title"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="Via VideoView"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <android.support.v4.widget.Space
+            android:layout_width="80px"
+            android:layout_height="10px"
+            android:layout_centerInParent="true" />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/main_video_two_image"
-            android:layout_alignRight="@id/main_video_two_image"
-            android:layout_below="@id/main_video_two_image"
-            android:layout_marginTop="8dp"
+            android:layout_centerVertical="true"
             android:focusable="false"
-            android:gravity="center"
-            tools:text="Tears of Steel"
-            android:textColor="@android:color/white"
-            android:textSize="28sp" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/main_video_two_image"
+                android:layout_width="@dimen/main_poster_width"
+                android:layout_height="300dp"
+                android:background="@drawable/selector_poster"
+                android:focusable="true"
+                android:nextFocusForward="@+id/main_video_three_image"
+                android:nextFocusLeft="@+id/main_video_one_image"
+                android:nextFocusRight="@+id/main_video_three_image"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                tools:src="@drawable/bigbuckbunny_720x1024" />
+
+            <TextView
+                android:id="@+id/main_video_two_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                tools:text="Big Buck Bunny" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="Via VideoView"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
+        <android.support.v4.widget.Space
+            android:layout_width="80px"
+            android:layout_height="10px"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/main_video_three_image"
+                android:layout_width="@dimen/main_poster_width"
+                android:layout_height="300dp"
+                android:background="@drawable/selector_poster"
+                android:focusable="true"
+                android:nextFocusForward="@+id/main_video_four_image"
+                android:nextFocusLeft="@+id/main_video_two_image"
+                android:nextFocusRight="@+id/main_video_four_image"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                tools:src="@drawable/tearsofsteel_720x1024" />
+
+            <TextView
+                android:id="@+id/main_video_three_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                tools:text="Tears of Steel" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="Via ExoPlayer"
+                android:textSize="20sp"/>
+
+        </LinearLayout>
+
+        <android.support.v4.widget.Space
+            android:layout_width="80px"
+            android:layout_height="10px"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/main_video_four_image"
+                android:layout_width="@dimen/main_poster_width"
+                android:layout_height="300dp"
+                android:background="@drawable/selector_poster"
+                android:focusable="true"
+                android:nextFocusForward="@+id/main_video_one_image"
+                android:nextFocusLeft="@+id/main_video_three_image"
+                android:nextFocusRight="@+id/main_video_one_image"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                tools:src="@drawable/elephantdream_720x1024" />
+
+            <TextView
+                android:id="@+id/main_video_four_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="28sp"
+                tools:text="Elephant's Dream" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:focusable="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:text="Via ExoPlayer"
+                android:textSize="20sp"/>
+        </LinearLayout>
+
     </LinearLayout>
 
 </RelativeLayout>

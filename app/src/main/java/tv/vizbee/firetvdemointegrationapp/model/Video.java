@@ -1,13 +1,9 @@
-package tv.vizbee.firetvdemointegrationapp;
+package tv.vizbee.firetvdemointegrationapp.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
-
-/**
- * Created by jesse on 1/18/17.
- */
 
 public class Video implements Parcelable {
 

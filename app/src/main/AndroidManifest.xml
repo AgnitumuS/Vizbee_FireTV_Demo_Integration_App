@@ -2,30 +2,42 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="tv.vizbee.firetvdemointegrationapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
-        android:allowBackup="true"
+        android:name=".DemoApp"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
+        <!-- [Begin] Vizbee Integration -->
+
+        <meta-data
+            android:name="whisperplay"
+            android:resource="@xml/whisperplay" />
+
+        <!-- [End] Vizbee Integration -->
+
         <activity
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.FullscreenTheme">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
-        <activity android:name=".VideoViewPlayerActivity"
+        <activity android:name=".videoView.VideoViewPlayerActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.FullscreenTheme">
         </activity>
 
-        <activity android:name=".ExoPlayerActivity"
+        <activity android:name=".exoPlayer.ExoPlayerActivity"
+            android:launchMode="singleTop"
             android:theme="@style/AppTheme.FullscreenTheme">
         </activity>
 
