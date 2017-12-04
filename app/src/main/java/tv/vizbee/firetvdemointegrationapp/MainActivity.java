@@ -139,15 +139,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void launchExoplayerActivity(String guid, int position) {
         Video video = VideoCatalog.all.get(guid);
 
-        if (null != video) {
-            Log.d(TAG, String.format("Launching ExoPlayerActivity with video: %s @ %d", video.getTitle(), position));
-            startActivity(new Intent(this, ExoPlayerActivity.class)
-                    .putExtra("video", video)
-                    .putExtra("position", position)
-            );
-        } else {
+        if (null == video) {
             displayPlayError(guid);
+            video = VideoCatalog.all.get(VideoCatalog.BIG_BUCK_BUNNY);
         }
+
+        Log.d(TAG, String.format("Launching ExoPlayerActivity with video: %s @ %d", video.getTitle(), position));
+        startActivity(new Intent(this, ExoPlayerActivity.class)
+                .putExtra("video", video)
+                .putExtra("position", position)
+        );
     }
 
     private void displayPlayError(String guid) {

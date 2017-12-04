@@ -18,6 +18,8 @@ public class DemoApp extends Application {
         // [BEGIN] Vizbee Integration
         // ---------------------------
 
+        boolean isProduction = false;
+
         Vizbee.getInstance().init(this, "vzb2000002", new IAppAdapter() {
             @Override
             public void start(Activity currentActivity, VideoInfo video, int position) {
@@ -34,7 +36,7 @@ public class DemoApp extends Application {
                         .putExtra("position", position);
                 currentActivity.startActivity(i);
             }
-        }, false);
+        }, isProduction, true);
 
         // ---------------------------
         // [END] Vizbee Integration

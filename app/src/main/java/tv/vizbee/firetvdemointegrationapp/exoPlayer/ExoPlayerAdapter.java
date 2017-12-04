@@ -1,6 +1,8 @@
 package tv.vizbee.firetvdemointegrationapp.exoPlayer;
 
 
+import android.util.Log;
+
 import com.google.android.exoplayer2.ExoPlayer;
 
 import tv.vizbee.screen.api.adapter.VZBAdapter;
@@ -18,14 +20,17 @@ public class ExoPlayerAdapter extends VZBAdapter {
         mExoPlayer = exoPlayer;
     }
 
+    @Override
     public void play() {
         mExoPlayer.setPlayWhenReady(true);
     }
 
+    @Override
     public void pause() {
         mExoPlayer.setPlayWhenReady(false);
     }
 
+    @Override
     public void seek(int position) {
         mExoPlayer.seekTo(position);
     }
@@ -42,9 +47,7 @@ public class ExoPlayerAdapter extends VZBAdapter {
             v.mPlaybackStatus = PlaybackStatus.PLAYING;
 
         } else if ((mExoPlayer.getPlaybackState() == ExoPlayer.STATE_READY) && !mExoPlayer.getPlayWhenReady()){
-            // IMPORTANT:
-            // downstream logic will change this to better state
-            v.mPlaybackStatus = PlaybackStatus.PAUSED_BY_UNKNOWN;
+            v.mPlaybackStatus = PlaybackStatus.PAUSED_BY_USER;
 
         } else if (mExoPlayer.getPlaybackState() == ExoPlayer.STATE_ENDED) {
             v.mPlaybackStatus = PlaybackStatus.FINISHED;
