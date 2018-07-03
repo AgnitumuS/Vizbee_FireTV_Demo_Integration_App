@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 
 import com.google.ads.interactivemedia.v3.api.AdDisplayContainer;
@@ -77,6 +78,7 @@ public class ExoPlayerActivity extends AppCompatActivity implements AdaptiveMedi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exo_player);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         // 1. Create a default TrackSelector
         mHandler = new Handler();
