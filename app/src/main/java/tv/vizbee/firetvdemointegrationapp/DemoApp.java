@@ -21,7 +21,7 @@ public class DemoApp extends Application {
 
         VizbeeOptions options = new VizbeeOptions.Builder().build();
 
-        Vizbee.getInstance().init(this, "vzb2000002", new IAppAdapter() {
+        Vizbee.getInstance().init(this, "vzb2000001", new IAppAdapter() {
             @Override
             public void start(Activity currentActivity, VideoInfo video, int position) {
 
