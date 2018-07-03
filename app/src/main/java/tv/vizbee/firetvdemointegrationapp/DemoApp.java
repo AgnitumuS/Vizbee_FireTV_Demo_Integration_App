@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Intent;
 
 import tv.vizbee.screen.api.Vizbee;
+import tv.vizbee.screen.api.VizbeeOptions;
 import tv.vizbee.screen.api.adapter.IAppAdapter;
 import tv.vizbee.screen.api.messages.VideoInfo;
 
@@ -18,7 +19,7 @@ public class DemoApp extends Application {
         // [BEGIN] Vizbee Integration
         // ---------------------------
 
-        boolean isProduction = false;
+        VizbeeOptions options = new VizbeeOptions.Builder().build();
 
         Vizbee.getInstance().init(this, "vzb2000002", new IAppAdapter() {
             @Override
@@ -36,7 +37,7 @@ public class DemoApp extends Application {
                         .putExtra("position", position);
                 currentActivity.startActivity(i);
             }
-        }, isProduction, true);
+        }, options);
 
         // ---------------------------
         // [END] Vizbee Integration
