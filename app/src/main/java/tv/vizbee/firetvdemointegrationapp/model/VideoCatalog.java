@@ -6,7 +6,7 @@ import tv.vizbee.firetvdemointegrationapp.R;
 
 public class VideoCatalog {
 
-    public static final String BIG_BUCK_BUNNY = "bunny";
+    public static final String BIG_BUCK_BUNNY = "bigbuck";
     public static final String TEARS_OF_STEEL = "tears";
     public static final String SINTEL = "sintel";
     public static final String ELEPHANTS_DREAM = "elephants";
